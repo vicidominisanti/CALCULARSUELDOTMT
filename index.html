@@ -10,7 +10,7 @@
     <style>
         body { 
             font-family: sans-serif; 
-            max-width: 1000px; /* Aumentamos el ancho para que la tabla quepa al lado */
+            max-width: 1000px; 
             margin: 50px auto; 
             padding: 20px; 
             border: 1px solid #ccc; 
@@ -43,7 +43,7 @@
             border-radius: 8px;
         }
 
-        /* Estilos generales */
+        /* Estilos de Tipografía y Resaltado */
         h1, h2 { color: #000; text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9); }
         label { 
             color: #000; font-weight: bold; 
@@ -56,7 +56,7 @@
         .resaltado-semanal { font-size: 1.8em; font-weight: bold; color: #28a745; display: block; margin-top: 10px; }
         .turno-input { display: flex; gap: 15px; }
         .turno-input > div { flex-grow: 1; }
-
+        
         /* Estilos de la tabla de puestos */
         #tablaPuestos {
             width: 100%;
@@ -73,11 +73,11 @@
             color: white;
             font-size: 0.9em;
         }
-        /* Clase para el input dentro de la tabla */
         .editable-input {
             width: 80px;
             padding: 4px;
             text-align: right;
+            border: 1px solid #007bff;
         }
     </style>
 </head>
@@ -145,7 +145,7 @@
                 <tbody id="puestosBody">
                     </tbody>
             </table>
-            <p style="font-size: 0.8em; margin-top: 15px;">*Los cambios se guardan automáticamente en tu navegador.</p>
+            <p style="font-size: 0.8em; margin-top: 15px;">*Edita los valores y se guardan automáticamente en tu navegador.</p>
         </div>
     </div>
     
@@ -155,38 +155,40 @@
         const TARIFA_LARGA_HS = 6.5;
         const TARIFA_MEDIODIA_HS = 4.0;
         
-        // --- DATA DE PUESTOS (Valores iniciales) ---
-        // Usamos un nombre claro y una tarifa inicial
+        // --- DATA DE PUESTOS (VALORES PROPORCIONADOS POR EL USUARIO) ---
         const PUESTOS_INICIALES = [
-            { nombre: "Encargado / Jefe", tarifa: 7800 },
-            { nombre: "Cocinero Principal", tarifa: 6500 },
-            { nombre: "Ayudante de Cocina", tarifa: 5800 },
-            { nombre: "Mozo / Mesero", tarifa: 5600 },
-            { nombre: "Cajero", tarifa: 5400 },
-            { nombre: "Cadete / Limpieza", tarifa: 4900 }
+            { nombre: "Caja", tarifa: 5327 },
+            { nombre: "Runner", tarifa: 4574 },
+            { nombre: "Panes", tarifa: 4575 },
+            { nombre: "Bolsa Freidora Armado", tarifa: 5327 },
+            { nombre: "Plancha", tarifa: 6016 },
+            { nombre: "Cocina Mediodía", tarifa: 5452 },
+            { nombre: "Caja Mediodía", tarifa: 5327 },
+            { nombre: "Pre Servicio", tarifa: 5327 }
         ];
 
         // Función que carga los datos de la tabla desde el almacenamiento local
         function cargarPuestos() {
             let puestos;
-            // Intentamos cargar la data guardada previamente
             const savedPuestos = localStorage.getItem('tarifasPuestos');
             
             if (savedPuestos) {
                 puestos = JSON.parse(savedPuestos);
             } else {
-                // Si no hay data guardada, usamos los valores iniciales
                 puestos = PUESTOS_INICIALES;
-                guardarPuestos(puestos); // Guardamos los iniciales para la próxima vez
+                guardarPuestos(puestos);
             }
             
             const tbody = document.getElementById('puestosBody');
-            tbody.innerHTML = ''; // Limpiamos la tabla
+            tbody.innerHTML = '';
             
             puestos.forEach((puesto, index) => {
                 const row = tbody.insertRow();
+                
+                // Celda del Nombre del Puesto
                 row.insertCell().textContent = puesto.nombre;
                 
+                // Celda del Input (Editable)
                 const inputCell = row.insertCell();
                 const input = document.createElement('input');
                 
@@ -213,14 +215,16 @@
             const savedPuestos = localStorage.getItem('tarifasPuestos');
             let puestos = savedPuestos ? JSON.parse(savedPuestos) : PUESTOS_INICIALES;
             
-            // Si la tarifa no es válida, la dejamos como estaba, si no, la actualizamos
             if (!isNaN(nuevaTarifa) && nuevaTarifa >= 0) {
-                puestos[index].tarifa = nuevaTarifa;
-                guardarPuestos(puestos);
+                // Aseguramos que la lista se extienda si es necesario, aunque esto no debería pasar si se usa solo la tabla.
+                if (puestos.length > index) {
+                   puestos[index].tarifa = nuevaTarifa;
+                   guardarPuestos(puestos);
+                }
             }
         }
 
-        // Función principal de la Calculadora (mantenida de la versión anterior)
+        // Función principal de la Calculadora (mantenida)
         function actualizarCalculos() {
             // Obtener inputs de tarifas
             const tarifa = parseFloat(document.getElementById('tarifa').value);
@@ -264,8 +268,10 @@
 
         // Ejecutar las funciones al cargar la página
         window.onload = function() {
-            cargarPuestos(); // Carga la tabla de puestos
-            actualizarCalculos(); // Ejecuta el cálculo de la calculadora
+            cargarPuestos();
+            // Para que los cambios de tarifa en la tabla no afecten la calculadora,
+            // la tarifa de la calculadora se sigue leyendo de los inputs
+            actualizarCalculos(); 
         };
     </script>
 </body>
