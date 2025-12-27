@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora de Sueldo Semanal</title>
+    <title>Calculadora de Sueldo Semanal (horario verano)</title>
     
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/vicidominisanti/CALCULARSUELDOTMT/main/fondo.png">
 
@@ -25,6 +25,7 @@
         h1, h2 { 
             color: #000;
             text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+            text-align: center;
         }
         label { 
             color: #000;
@@ -58,7 +59,7 @@
 </head>
 <body>
     <div class="calculadora-container">
-        <h1>Calculadora de Sueldo Semanal</h1>
+        <h1>Calculadora de Sueldo Semanal <br>(horario verano)</h1>
 
         <label for="tarifa">Tarifa por Hora Tarde/Noche ($)</label>
         <input type="number" id="tarifa" value="5327" min="0" oninput="actualizarCalculos()">
@@ -108,7 +109,6 @@
     </div>
     
     <script>
-        // --- NUEVOS HORARIOS ACTUALIZADOS ---
         const HS_NORMAL = 5.0; 
         const HS_LARGO = 7.0;  
         const HS_MEDIODIA = 4.0; 
@@ -121,29 +121,4 @@
             const diasLargos = parseInt(document.getElementById('diasLargos').value) || 0;
             const diasMediodia = parseInt(document.getElementById('diasMediodia').value) || 0;
             
-            // Pagos por un solo día
-            const pagoNormal = tarifa * HS_NORMAL;
-            const pagoLargo = tarifa * HS_LARGO;
-            const pagoMediodia = tarifaMediodia * HS_MEDIODIA;
-
-            document.getElementById('pagoDiaNormal').textContent = `$${pagoNormal.toFixed(2)}`;
-            document.getElementById('pagoDiaLargo').textContent = `$${pagoLargo.toFixed(2)}`;
-            document.getElementById('pagoDiaMediodia').textContent = `$${pagoMediodia.toFixed(2)}`;
-
-            // Subtotales semanales
-            const subNormal = pagoNormal * diasNormales;
-            const subLargo = pagoLargo * diasLargos;
-            const subMediodia = pagoMediodia * diasMediodia;
-
-            const total = subNormal + subLargo + subMediodia;
-            
-            document.getElementById('subtotalNormal').textContent = `$${subNormal.toFixed(2)}`;
-            document.getElementById('subtotalLargo').textContent = `$${subLargo.toFixed(2)}`;
-            document.getElementById('subtotalMediodia').textContent = `$${subMediodia.toFixed(2)}`;
-            document.getElementById('totalSemanal').textContent = `$${total.toFixed(2)}`;
-        }
-
-        window.onload = actualizarCalculos;
-    </script>
-</body>
-</html>
+            const pagoNormal
