@@ -10,13 +10,11 @@
     <style>
         body { 
             font-family: sans-serif; 
-            max-width: 650px; /* Ancho ajustado para solo la calculadora */
+            max-width: 650px; 
             margin: 50px auto; 
             padding: 20px; 
             border: 1px solid #ccc; 
             border-radius: 12px; 
-            
-            /* Fondo de imagen */
             background-image: url('https://raw.githubusercontent.com/vicidominisanti/CALCULARSUELDOTMT/main/fondo.png'); 
             background-size: cover; 
             background-attachment: fixed;
@@ -24,7 +22,6 @@
             color: #000;
         }
         
-        /* Estilos ajustados para la legibilidad sobre el fondo */
         h1, h2 { 
             color: #000;
             text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
@@ -39,8 +36,7 @@
             margin-top: 15px; 
         }
         
-        /* Cajas con fondo blanco para contraste */
-        .calculadora-container { /* Nuevo contenedor para todo el contenido */
+        .calculadora-container { 
             padding: 20px;
             background-color: rgba(255, 255, 255, 0.95);
             border-radius: 8px;
@@ -50,10 +46,9 @@
             padding: 15px; 
             border: 2px solid #007bff; 
             border-radius: 8px; 
-            background-color: #e9f5ff; /* Color de fondo dentro de la caja */
+            background-color: #e9f5ff; 
         }
         
-        /* Estilos de inputs, botones y resaltados */
         input[type="number"] { width: 100%; padding: 10px; margin-top: 5px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
         .resaltado { font-size: 1.4em; font-weight: bold; color: #d9534f; display: block; margin-top: 5px; }
         .resaltado-semanal { font-size: 1.8em; font-weight: bold; color: #28a745; display: block; margin-top: 10px; }
@@ -65,40 +60,40 @@
     <div class="calculadora-container">
         <h1>Calculadora de Sueldo Semanal</h1>
 
-        <label for="tarifa">Tarifa por Hora Tarde/Noche ($) (ej: 5327)</label>
+        <label for="tarifa">Tarifa por Hora Tarde/Noche ($)</label>
         <input type="number" id="tarifa" value="5327" min="0" oninput="actualizarCalculos()">
         
-        <label for="tarifaMediodia">Tarifa por Hora Turno Mediodía ($) (ej: 5452)</label>
+        <label for="tarifaMediodia">Tarifa por Hora Turno Mediodía ($)</label>
         <input type="number" id="tarifaMediodia" value="5452" min="0" oninput="actualizarCalculos()">
 
         <h2>1. Valores por Turno (Referencia)</h2>
         <div class="turno-input">
             <div>
-                <p><strong>Día Normal (4,5 hs)</strong></p>
-                <p>Pago por día: <span id="pagoDiaNormal" class="resaltado">$0.00</span></p>
+                <p><strong>Día Normal (5 hs)</strong></p>
+                <p>Pago: <span id="pagoDiaNormal" class="resaltado">$0.00</span></p>
             </div>
             <div>
-                <p><strong>Día Largo/Extra (6,5 hs)</strong></p>
-                <p>Pago por día: <span id="pagoDiaLargo" class="resaltado">$0.00</span></p>
+                <p><strong>Día Largo (7 hs)</strong></p>
+                <p>Pago: <span id="pagoDiaLargo" class="resaltado">$0.00</span></p>
             </div>
             <div>
-                <p><strong>Día Mediodía (4,0 hs)</strong></p>
-                <p>Pago por día: <span id="pagoDiaMediodia" class="resaltado">$0.00</span></p>
+                <p><strong>Mediodía (4 hs)</strong></p>
+                <p>Pago: <span id="pagoDiaMediodia" class="resaltado">$0.00</span></p>
             </div>
         </div>
         
         <h2>2. Total Semanal</h2>
         <div class="turno-input">
             <div>
-                <label for="diasNormales">Total Días Normales</label>
-                <input type="number" id="diasNormales" value="3" min="0" oninput="actualizarCalculos()">
+                <label for="diasNormales">Cant. Normales</label>
+                <input type="number" id="diasNormales" value="0" min="0" oninput="actualizarCalculos()">
             </div>
             <div>
-                <label for="diasLargos">Total Días Largos</label>
-                <input type="number" id="diasLargos" value="1" min="0" oninput="actualizarCalculos()">
+                <label for="diasLargos">Cant. Largos</label>
+                <input type="number" id="diasLargos" value="0" min="0" oninput="actualizarCalculos()">
             </div>
             <div>
-                <label for="diasMediodia">Total Días Mediodía</label>
+                <label for="diasMediodia">Cant. Mediodía</label>
                 <input type="number" id="diasMediodia" value="0" min="0" oninput="actualizarCalculos()">
             </div>
         </div>
@@ -108,62 +103,47 @@
             <p>Subtotal Normal: <span id="subtotalNormal" class="resaltado">$0</span></p>
             <p>Subtotal Largo: <span id="subtotalLargo" class="resaltado">$0</span></p>
             <p>Subtotal Mediodía: <span id="subtotalMediodia" class="resaltado">$0</span></p>
-            <p><strong>SUELDO BRUTO SEMANAL:</strong> <span id="totalSemanal" class="resaltado-semanal">$0</span></p>
+            <p><strong>TOTAL SEMANAL:</strong> <span id="totalSemanal" class="resaltado-semanal">$0</span></p>
         </div>
     </div>
     
     <script>
-        // --- CONSTANTES DE HORAS ---
-        const TARIFA_NORMAL_HS = 4.5;
-        const TARIFA_LARGA_HS = 6.5;
-        const TARIFA_MEDIODIA_HS = 4.0;
+        // --- NUEVOS HORARIOS ACTUALIZADOS ---
+        const HS_NORMAL = 5.0; 
+        const HS_LARGO = 7.0;  
+        const HS_MEDIODIA = 4.0; 
         
-        // Función principal que se ejecuta cada vez que cambias un valor
         function actualizarCalculos() {
-            // Obtener inputs de tarifas
-            const tarifa = parseFloat(document.getElementById('tarifa').value);
-            const tarifaMediodia = parseFloat(document.getElementById('tarifaMediodia').value);
+            const tarifa = parseFloat(document.getElementById('tarifa').value) || 0;
+            const tarifaMediodia = parseFloat(document.getElementById('tarifaMediodia').value) || 0;
             
-            // Obtener inputs de días
             const diasNormales = parseInt(document.getElementById('diasNormales').value) || 0;
             const diasLargos = parseInt(document.getElementById('diasLargos').value) || 0;
             const diasMediodia = parseInt(document.getElementById('diasMediodia').value) || 0;
             
-            // Validaciones
-            if (isNaN(tarifa) || tarifa < 0 || isNaN(tarifaMediodia) || tarifaMediodia < 0) {
-                document.getElementById('totalSemanal').textContent = '$0.00';
-                return;
-            }
+            // Pagos por un solo día
+            const pagoNormal = tarifa * HS_NORMAL;
+            const pagoLargo = tarifa * HS_LARGO;
+            const pagoMediodia = tarifaMediodia * HS_MEDIODIA;
 
-            // --- CÁLCULO DE UN SOLO DÍA (Referencia) ---
-            const pagoDiaNormal = tarifa * TARIFA_NORMAL_HS;
-            const pagoDiaLargo = tarifa * TARIFA_LARGA_HS;
-            const pagoDiaMediodia = tarifaMediodia * TARIFA_MEDIODIA_HS;
+            document.getElementById('pagoDiaNormal').textContent = `$${pagoNormal.toFixed(2)}`;
+            document.getElementById('pagoDiaLargo').textContent = `$${pagoLargo.toFixed(2)}`;
+            document.getElementById('pagoDiaMediodia').textContent = `$${pagoMediodia.toFixed(2)}`;
 
+            // Subtotales semanales
+            const subNormal = pagoNormal * diasNormales;
+            const subLargo = pagoLargo * diasLargos;
+            const subMediodia = pagoMediodia * diasMediodia;
 
-            document.getElementById('pagoDiaNormal').textContent = `$${pagoDiaNormal.toFixed(2)}`;
-            document.getElementById('pagoDiaLargo').textContent = `$${pagoDiaLargo.toFixed(2)}`;
-            document.getElementById('pagoDiaMediodia').textContent = `$${pagoDiaMediodia.toFixed(2)}`;
-
-
-            // --- CÁLCULO SEMANAL ---
-            const subtotalNormal = pagoDiaNormal * diasNormales;
-            const subtotalLargo = pagoDiaLargo * diasLargos;
-            const subtotalMediodia = pagoDiaMediodia * diasMediodia;
-
-            const totalSemanal = subtotalNormal + subtotalLargo + subtotalMediodia;
+            const total = subNormal + subLargo + subMediodia;
             
-            // Mostrar resultados semanales
-            document.getElementById('subtotalNormal').textContent = `$${subtotalNormal.toFixed(2)}`;
-            document.getElementById('subtotalLargo').textContent = `$${subtotalLargo.toFixed(2)}`;
-            document.getElementById('subtotalMediodia').textContent = `$${subtotalMediodia.toFixed(2)}`;
-            document.getElementById('totalSemanal').textContent = `$${totalSemanal.toFixed(2)}`;
+            document.getElementById('subtotalNormal').textContent = `$${subNormal.toFixed(2)}`;
+            document.getElementById('subtotalLargo').textContent = `$${subLargo.toFixed(2)}`;
+            document.getElementById('subtotalMediodia').textContent = `$${subMediodia.toFixed(2)}`;
+            document.getElementById('totalSemanal').textContent = `$${total.toFixed(2)}`;
         }
 
-        // Ejecutar el cálculo inicial al cargar la página
-        window.onload = function() {
-            actualizarCalculos(); 
-        };
+        window.onload = actualizarCalculos;
     </script>
 </body>
 </html>
